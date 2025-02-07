@@ -36,17 +36,18 @@ class AuthController extends Controller
             "status" => "success",
             "message" => "Regsiter Success",
             "data" => $user
-        ],201);
+        ], 201);
     }
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         $validation = $request->validate([
             "email" => "required",
             "password" => "required|min:6",
         ]);
 
-        $user = User::where('email',$request->email)->first();
-        if($user && Hash::check($request->password,$user->password)){
+        $user = User::where('email', $request->email)->first();
+        if ($user && Hash::check($request->password, $user->password)) {
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
@@ -54,22 +55,43 @@ class AuthController extends Controller
                 "message" => "Login Success",
                 "data" => $user,
                 "token" => $token
-            ],200);
+            ], 200);
         }
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         $user = $request->user();
         if ($user) {
             $user->currentAccessToken()->delete();
             return response()->json([
                 "status" => "success",
                 "message" => "Logout Success",
-            ],200);
+            ], 200);
         }
         return response()->json([
             "status" => "Error",
             "message" => "Token g ada",
-        ],401);
+        ], 401);
+    }
+
+
+    public function validateEmail(Request $request)
+    {
+        $request->validate([
+            "email" => "email|required",
+        ]);
+        $check = User::where('email', $request->email)->first();
+        if ($request->email !== $check) {
+            return response()->json([
+                "status" => "error",
+                "message" => "emsil tidak sama",
+            ],404);
+        }
+        return response()->json([
+            "status" => "success",
+            "message" => "emsil berhasil di validasi",
+            "data" => $check
+        ],200);
     }
 }
