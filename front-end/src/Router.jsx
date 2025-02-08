@@ -9,6 +9,7 @@ import Index from "./page";
 import SelectPresident from "./page/Presidents";
 import SelectDPR from "./page/DPR";
 import SelectDPD from "./page/DPD";
+import Detail from "./page/DPD/detail";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
         path: "/select-DPD",
         element: <SelectDPD />,
       },
+      {
+        path:"/DPD/detail",
+        element: <Detail/>
+      }
     ],
   },
   {
